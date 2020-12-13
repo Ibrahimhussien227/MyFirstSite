@@ -1,0 +1,65 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+    <section>
+        <div class="row bg-white">
+            <div class="col-lg-8">
+                <div class="mb-3">
+                    <div class="pt-4">
+                        <h5 class="mb-4">Cart (<strong>{{ order.get_cart_items }}</strong> items)</h5>
+                        <div class="row mb-4">
+                            {% for item in items %}
+                                <div class="col-md-5 col-lg-3 col-xl-3">
+                                    <div>
+                                        <img class="img-fluid w-100"
+                                             src="{{ item.product.imageURL }}">
+                                    </div>
+                                </div>
+                                <div class="cart-row col-md-7 col-lg-9 col-xl-9">
+                                    <div class="cart-row" >
+                                        <div>
+                                            <h5>{{ item.product.name }}</h5>
+                                            <div class="quantity">
+                                                <img data-product={{ item.product.id }} data-action="add"
+                                                     class="chg-quantity update-cart"
+                                                     src="{% static 'images/add.png' %}">
+                                                <a class="quantity">x{{ item.quantity }}</a>
+                                                <img data-product={{ item.product.id }} data-action="remove"
+                                                     class="chg-quantity update-cart"
+                                                     src="{% static 'images/minus.png' %}">
+                                            </div>
+                                        </div>
+                                        <span><strong>${{ item.product.price|floatformat:2 }}</strong></span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <hr class="mb-4">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <div class="pt-4">
+
+                        <h5 class="mb-3">The total</h5>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0" >
+                                Items: <strong>x{{ order.get_cart_items }}</strong>
+                            </li>
+
+                            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                <div>
+                                    <strong>The total</strong>
+                                </div>
+                                <span><strong>${{ order.get_cart_total| floatformat:2 }}</strong></span>
+                            </li>
+                        </ul>
+                        <a type="button" class="btn btn-success btn-block btn-info" href="{% url 'checkout' %}">go to checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

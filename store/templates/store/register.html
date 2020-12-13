@@ -1,0 +1,53 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <div class="pt-4 pb-3">
+            <h5 class="text-center text-white mt-1 mb-4">Sign Up</h5>
+
+            <form action="register" method="post" id="form">
+                {% csrf_token %}
+
+
+                <div class="form-row">
+                    <div class="col">
+                        <input required type="text" placeholder="First name"
+                               name="first_name"
+                               class="form-control">
+                        <hr>
+                    </div>
+                    <div class="col">
+                        <input required type="text" name="last_name" placeholder="Last name"
+                               class="form-control">
+                    </div>
+                </div>
+                <input required type="text" placeholder="Username" name="username" class="form-control">
+                <hr>
+                <input required type="email" placeholder="Your email" name="email" class="form-control">
+                <hr>
+                <input required type="password" placeholder="Your password" name="password1" class="form-control">
+                <hr>
+                <input required type="password" placeholder="Confirm password" name="confirm_password"
+                       class="form-control">
+                <hr>
+                <small class="form-text text-muted mb-4">
+                    At least 8 characters and 1 digit
+                </small>
+                <div class="text-center mb-2">
+
+                    <button type="submit" class="btn btn-light mb-4">Sign Up</button>
+                    <hr class="mt-4">
+
+                    <p class="text-white">By clicking Sign up you agree to our
+                        <a href="" target="_blank">terms of service</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div>
+        {% for message in messages %}
+            <h3>{{ message }}</h3>
+        {% endfor %}
+    </div>
+{% endblock %}

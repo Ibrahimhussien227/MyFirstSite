@@ -1,0 +1,49 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+    <div>
+
+        <div class="pt-4 pb-3">
+
+            <h5 class="text-center mt-1 mb-4 text-white">Sign In</h5>
+
+            <form action="login" method="post">
+                {% csrf_token %}
+
+
+                <div>
+                    <input type="text" required name="username" class="form-control" placeholder="Username">
+                    <hr>
+                </div>
+                <div class="md-form md-outline">
+                    <input type="password" name="password" required class="form-control" placeholder="Your password">
+                    <hr>
+                </div>
+
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+
+                    <div class="form-check pl-0 mb-3">
+                        <input type="checkbox" class="form-check-input" id="new">
+                        <label class="form-check-label small text-uppercase card-link text-white" for="new">Remember
+                            me</label>
+                    </div>
+
+                    <p><a href="">Forgot password?</a></p>
+
+                </div>
+
+                <div class="text-center pb-2">
+
+                    <button type="submit" class="btn btn-light mb-4">Sign in</button>
+
+                    <p class="text-white">Not a member? <a href="{% url 'register' %}">Register</a></p>
+                </div>
+            </form>
+
+
+        </div>
+
+
+    </div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+    <div class="jumbotron jumbotron-image color-grey-light"
+         style="background: white; height: 400px;">
+        <div class="mask rgba-black-strong d-flex align-items-center h-100">
+            <div class="container text-center white-text py-5">
+                <h1 class="mb-3">Electronic Shop</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row" >
+        {% for product in products %}
+            <div class="col-6 col-sm-4">
+                <img class="thumbnail" src="{{ product.imageURL }}">
+                <div class="box-element product">
+                    <h6><strong>{{ product.name }}</strong></h6>
+                    <hr>
+                    <h6>{{ product.description }}</h6>
+                    <p><span class="mr-1"><strong>${{ product.price|floatformat:2 }}</strong></span></p>
+                    <button data-product={{ product.id }} data-action="add"
+                            class="btn btn-outline-secondary add-btn update-cart">Add to Cart
+                    </button>
+                    <button type="button" class="btn btn-outline-info">
+                        Details
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <footer class="page-footer font-small bg-dark">
+        <div class="container">
+            <div class="row">
+                <div class="col my-5">
+                    <ul class="list-unstyled d-flex justify-content-center align-items-center mb-0">
+                        <li>
+                            <h5 class="mb-0 mr-3 text-white">Register for free</h5>
+                        </li>
+                        <li>
+                            <a href="{% url 'register' %}" class="btn border-white text-white">Sign up!</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright text-center py-3">© 2020 Copyright:
+            <a href="/#"> MyStore.com</a>
+        </div>
+    </footer>
+
+{% endblock content %}
