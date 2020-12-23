@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
+from store.models import Customer
 
 
 # Create your views here.
@@ -43,6 +44,13 @@ def register(request):
                                                 password=password1)
 
                 user.save()
+
+                customer = Customer()
+                customer.user = user
+                customer.name = username
+                customer.email = email
+                customer.save()
+
                 print('user created')
                 return redirect('login')
 

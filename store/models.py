@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 # Create your models here.
+from django.urls import reverse
+
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -31,9 +32,12 @@ class Product(models.Model):
             url = ''
         return url
 
+    def get_absolute_url(self):
+        return reverse('product_details', kwargs={'pk': self.pk})
+
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
     transaction_id = models.CharField(max_length=200, null=True)
@@ -88,3 +92,8 @@ class ShippingAddress(models.Model):
         return self.address, self.phone
 
 
+class Comment(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    comment = models.TextField(max_length=250, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)

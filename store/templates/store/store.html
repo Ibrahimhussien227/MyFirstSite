@@ -9,21 +9,26 @@
             </div>
         </div>
     </div>
-    <div class="row" >
+    <div class="row">
         {% for product in products %}
             <div class="col-6 col-sm-4">
                 <img class="thumbnail" src="{{ product.imageURL }}">
                 <div class="box-element product">
                     <h6><strong>{{ product.name }}</strong></h6>
                     <hr>
-                    <h6>{{ product.description }}</h6>
                     <p><span class="mr-1"><strong>${{ product.price|floatformat:2 }}</strong></span></p>
                     <button data-product={{ product.id }} data-action="add"
                             class="btn btn-outline-secondary add-btn update-cart">Add to Cart
                     </button>
-                    <button type="button" class="btn btn-outline-info">
-                        Details
-                    </button>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'product_details' product.pk %}" class="btn btn-outline-secondary btn-outline-success">
+                            Details
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-outline-success">You have
+                            to sign in to see the details
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

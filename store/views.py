@@ -1,9 +1,12 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.http import JsonResponse
 import json
+from django.contrib.auth.decorators import login_required
 import datetime
 from .models import *
-from .utlits import cookieCart, cartData, guestOrder
+from .forms import *
+from .utlits import cartData, guestOrder
 
 
 # Create your views here.
@@ -91,3 +94,55 @@ def processOrder(request):
             phone=data['shipping']['phone'],
         )
     return JsonResponse('Payment complete', safe=False)
+
+
+@login_required
+def product_details(request, pk):
+    products = Product.objects.get(pk=pk)
+    comments = Comment.objects.filter(product=products).order_by('-pk')
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            content = request.POST.get('comment')
+            comment = Comment.objects.create(product=products, user=request.user, comment=content)
+            comment.save()
+            return redirect('product_details', pk=pk)
+    else:
+        comment_form = CommentForm()
+    context = {
+        'products': products,
+        'cartItems': cartItems,
+        'order': order,
+        'items': items,
+        'comments': comments,
+        'comment_form': comment_form}
+    return render(request, 'store/product_details.html', context)
+
+
+@login_required
+def product_delete(request, pk):
+    products = Product.objects.get(id=pk)
+    if request.user.is_superuser:
+        Product.objects.get(id=pk).delete()
+    return redirect('store')
+
+
+def edit_product(request, pk):
+    product = Product.objects.get(pk=pk)
+    if request.method == 'POST':
+        p_form = ProductUpdateForm(request.POST, request.FILES, instance=product)
+        if p_form.is_valid():
+            p_form.save()
+            messages.success(request, 'The product has been updated')
+            return redirect('product_details', pk=pk)
+    else:
+        p_form = ProductUpdateForm(instance=product)
+    context = {
+        'p_form': p_form,
+        'product': product
+    }
+    return render(request, 'store/edit_product.html', context)

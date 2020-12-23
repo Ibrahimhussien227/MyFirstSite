@@ -1,0 +1,99 @@
+{% extends 'store/main.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block content %}
+    <section class="mb-5">
+
+        <div class="row">
+            <div class="col-md-6 mb-4 mb-md-0">
+
+                <div>
+                    <div class="row mx-1">
+                        <div class="col-12 mb-0">
+                            <figure>
+                                <a>
+                                    <img src="{{ products.imageURL }}"
+                                         class="img-fluid">
+                                </a>
+                            </figure>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <h5 class="text-white"> {{ products.name }}</h5>
+                {% if request.user.is_superuser %}
+                    <a class="btn btn-outline-danger" href="{% url 'product_delete' products.pk %}">Delete</a>
+                    <a class="btn btn-light" href="{% url 'edit_product' products.pk %}">Edit Profile</a>
+                {% endif %}
+                <p><span class="mr-1 text-black-50"><strong>${{ products.price|floatformat:2 }}</strong></span>
+                </p>
+                <p class="pt-1 text-white">{{ products.description }}</p>
+
+                <hr>
+                <div class="table-responsive mb-2">
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                        <tr>
+                            <td class="pl-0 pb-0 w-25 text-white">Quantity</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-0">
+                                {% for item in items %}
+                                    <div class="quantity">
+                                        <img data-product={{ item.product.id }} data-action="add"
+                                             class="chg-quantity update-cart"
+                                             src="{% static 'images/add.png' %}">
+                                        <a class="quantity text-white-50">x{{ item.quantity }}</a>
+                                        <img data-product={{ item.product.id }} data-action="remove"
+                                             class="chg-quantity update-cart"
+                                             src="{% static 'images/minus.png' %}">
+                                    </div>
+                                {% endfor %}
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button data-product={{ products.id }} data-action="add"
+                        class="btn btn-secondary add-btn update-cart">Add to Cart
+                </button>
+            </div>
+        </div>
+    </section>
+    <div class="col-md-8 card mb-4  mt-3 ">
+        <div class="card-body">
+            <h2>{{ comments.count }} Comments</h2>
+
+            {% for commentss in comments %}
+                <div class="comments" style="padding: 10px;">
+                    <p class="font-weight-bold">
+                        {{ commentss.user }}
+                        <span class=" text-muted font-weight-normal">
+              {{ commentss.timestamp }}
+            </span>
+                    </p>
+                    {{ commentss.comment | linebreaks }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-8 card mb-4  mt-3 ">
+        <div class="card-body">
+            <h3>Leave a comment</h3>
+            <form method="post" style="margin-top: 1.3em;">
+                {% csrf_token %}
+                {{ comment_form | crispy }}
+                {% if user.is_authenticated %}
+                    <button type="submit" class="btn btn-primary btn-secondary btn-lg">Submit</button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary btn-outline-success btn-dark  btn-lg" disabled>Submit
+                    </button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock content %}

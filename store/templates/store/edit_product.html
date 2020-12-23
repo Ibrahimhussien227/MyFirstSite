@@ -1,0 +1,31 @@
+{% extends 'store/main.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-8 col-lg-7 mx-auto">
+                <div class="card my-5">
+                    <div class="card-body">
+                        <h5 class="card-title text-center"><b>Update Product</b></h5>
+                        <form class="form" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                <br/>
+                                {{ p_form|crispy }}
+                            </fieldset>
+                            <div class="form-group">
+                                <button class="btn btn-lg btn-outline-info btn-block"
+                                        type="submit">Update
+                                </button>
+                                <br/><br/>
+                                <a class="btn btn-dark"
+                                   href="{% url 'product_details' product.pk %}">&#x2190; Go Back</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
