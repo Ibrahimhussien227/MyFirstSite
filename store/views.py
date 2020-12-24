@@ -149,12 +149,11 @@ def edit_product(request, pk):
 
 
 def add_product(request):
-    form = AddProductForm()
+    addproduct = AddProductForm()
     if request.method == 'POST':
-        # print('Printing POST:', request.POST)
-        form = AddProductForm(request.POST)
-        if form.is_valid():
-            form.save()
+        addproduct = AddProductForm(request.POST)
+        if addproduct.is_valid():
+            addproduct.save()
             return redirect('store')
-    context = {'form': form}
+    context = {'form': addproduct}
     return render(request, 'store/add_product.html', context)
