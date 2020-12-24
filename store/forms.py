@@ -12,3 +12,9 @@ class ProductUpdateForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['name', 'price', 'description', 'image']
+
+
+class AddProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'price', 'description', 'image']
